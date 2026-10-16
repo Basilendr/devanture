@@ -100,25 +100,51 @@ for (const largeur of [375, 768, 1440]) {
   await pause(700);
   ok('Accordéon : rouvert', await p.locator('.faq__el').first().evaluate((d) => d.open));
 
-  // Formulaire
-  await p.locator('#f-tel').scrollIntoViewIfNeeded();
-  await p.fill('#f-tel', '06 12');
-  await p.locator('#f-tel').blur();
-  ok('Formulaire : erreur de téléphone sous le champ', (await p.textContent('#f-tel-msg')).includes('10 chiffres'));
-  await p.fill('#f-tel', '06 12 34 56 78');
-  ok('Formulaire : erreur effacée pendant la saisie', (await p.textContent('#f-tel-msg')) === '');
-  await p.click('.form__envoyer');
-  ok('Formulaire : focus sur le premier champ invalide', await p.evaluate(() => document.activeElement?.id === 'f-nom'));
-  await p.fill('#f-nom', 'Fleurs test');
-  await p.selectOption('#f-metier', 'Fleuriste');
-  await p.fill('#f-quartier', 'Paris 16e');
+  // Questionnaire en étapes
+  const suite = () => p.click('[data-suite]');
+  const choisir = (t) => p.locator('[data-etape]:not([hidden]) .options').getByText(t, { exact: true }).click();
+  await p.locator('[data-formulaire]').scrollIntoViewIfNeeded();
+  await suite();
+  ok('Questionnaire : bloque une étape incomplète', (await p.textContent('#q0-0-msg')).length > 0 && (await p.isVisible('[data-etape="0"]')));
+  await p.fill('#q0-0', 'Fleurs test');
+  await p.selectOption('#q0-1', 'Fleuriste');
+  await p.fill('#q0-2', 'Paris 16e');
+  await suite();
+  ok('Questionnaire : passe à l’étape 2', await p.isVisible('[data-etape="1"]'));
+  await suite();
+  ok('Questionnaire : choix obligatoire signalé', (await p.textContent('#q1-0-msg')).includes('Choisissez'));
+  await choisir('Non, aucun');
+  await choisir('Instagram');
+  await choisir('Fiche Google (Maps)');
+  await suite();
+  await choisir('Être trouvé sur Google');
+  await choisir('Horaires');
+  await suite();
+  await choisir('Chaleureux et artisanal');
+  await suite();
+  ok('Questionnaire : dernière étape atteinte', await p.isVisible('[data-envoyer]'));
+  await p.fill('#q4-1', '06 12');
+  await p.locator('#q4-1').blur();
+  ok('Questionnaire : erreur de téléphone sous le champ', (await p.textContent('#q4-1-msg')).includes('10 chiffres'));
+  await p.fill('#q4-1', '06 12 34 56 78');
+  ok('Questionnaire : erreur effacée pendant la saisie', (await p.textContent('#q4-1-msg')) === '');
+  await p.fill('#q4-0', 'Camille Test');
+  await p.click('[data-envoyer]');
+  ok('Questionnaire : consentement exigé', (await p.textContent('#f-rgpd-msg')).length > 0);
   await p.check('#f-rgpd');
-  // Adresse d'envoi simulée
-  await p.$eval('[data-formulaire]', (f) => (f.action = 'https://formspree.io/f/test'));
-  await p.route('https://formspree.io/**', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }));
-  await p.click('.form__envoyer');
+  let envoye = null;
+  await p.route('https://formsubmit.co/**', (r) => {
+    envoye = { url: r.request().url(), corps: r.request().postDataJSON() };
+    r.fulfill({ status: 200, contentType: 'application/json', body: '{"success":"true"}' });
+  });
+  await p.click('[data-envoyer]');
   await pause(600);
-  ok('Formulaire : confirmation affichée', await p.isVisible('[data-confirmation]'));
+  ok('Questionnaire : confirmation affichée', await p.isVisible('[data-confirmation]'));
+  ok('Questionnaire : un seul e-mail vers l’adresse du site', envoye?.url === 'https://formsubmit.co/ajax/devanture.paris@gmail.com');
+  ok('Questionnaire : toutes les réponses dans l’e-mail',
+    envoye?.corps?.['Présence en ligne'] === 'Fiche Google (Maps), Instagram' && envoye?.corps?.['Contenu souhaité'] === 'Horaires',
+    envoye?.corps?._subject);
+  console.log('\n--- Aperçu du résumé envoyé ---\n' + envoye?.corps?.['Résumé complet'] + '\n');
   await p.screenshot({ path: 'captures/confirmation-375.png' });
   await ctx.close();
 }

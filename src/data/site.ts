@@ -21,8 +21,9 @@ export const site = {
 
   // Pas de prix affiché : il dépend de la demande, le client appelle pour le connaître.
 
-  // Adresse d'envoi du formulaire (Formspree : créez un formulaire et collez son identifiant).
-  formulaireAdresse: 'https://formspree.io/f/[ID_FORMSPREE]',
+  // Envoi du questionnaire : FormSubmit transfère chaque demande, en un seul e-mail, à l'adresse du site.
+  // (La toute première demande déclenche un e-mail d'activation à confirmer une fois.)
+  formulaireAdresse: 'https://formsubmit.co/devanture.paris@gmail.com',
 
   // Mentions légales
   editeur: {

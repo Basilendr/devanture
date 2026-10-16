@@ -28,7 +28,6 @@ Cherchez `[` dans le projet : chaque valeur entre crochets est à remplir.
 
 - `[NOM PRÉNOM]`, `[STATUT JURIDIQUE]`, `[SIRET]`, `[ADRESSE]`
 - `[DURÉE]` : durée de conservation des demandes (ex. « 3 ans après notre dernier échange »)
-- `[ID_FORMSPREE]` : voir « Formulaire » ci-dessous
 - `[DOMAINE]` dans `astro.config.mjs`
 - `[DATE]` et la mention de TVA dans les deux pages légales
 
@@ -36,17 +35,22 @@ Aucun prix n'est affiché : les cartes de tarifs invitent à appeler pour conna�
 Tant qu'une valeur n'est pas remplie, elle n'est **pas** envoyée à Google dans les données
 structurées.
 
-### Formulaire
+### Questionnaire « maquette gratuite »
 
-Le formulaire est envoyé à [Formspree](https://formspree.io) (gratuit jusqu'à 50 demandes par mois),
-qui vous transfère chaque demande par e-mail.
+Le questionnaire compte 5 étapes (commerce, présence actuelle, attentes, style, coordonnées). Les
+questions se modifient dans [`src/data/questionnaire.ts`](src/data/questionnaire.ts) : ajoutez,
+retirez ou reformulez une question, le site et l'e-mail suivent tout seuls.
 
-1. Créez un compte sur formspree.io, puis « New form ».
-2. Copiez l'identifiant du formulaire (la fin de l'adresse, ex. `xyzabcd`).
-3. Collez-le dans `src/data/site.ts` à la place de `[ID_FORMSPREE]`.
+**Toutes les réponses arrivent dans un seul e-mail** sur `devanture.paris@gmail.com`, via
+[FormSubmit](https://formsubmit.co) (gratuit, sans compte). L'objet contient le nom du commerce, le
+métier et la ville ; le corps contient un « Résumé complet » prêt à copier, puis chaque réponse dans
+un tableau. « Répondre » écrit directement au client s'il a donné son e-mail.
 
-Un champ piège invisible (`_gotcha`) bloque les robots. Tant que l'identifiant n'est pas rempli,
-l'envoi affiche un message d'erreur invitant à téléphoner.
+**Une seule fois** : la toute première demande déclenche un e-mail « Activate Form » de FormSubmit
+sur `devanture.paris@gmail.com`. Cliquez sur le lien d'activation, sinon rien n'arrive. Pour changer
+d'adresse de réception, modifiez `formulaireAdresse` dans `src/data/site.ts` (et réactivez).
+
+Un champ piège invisible (`_honey`) bloque les robots.
 
 ## Travailler en local
 

@@ -1,6 +1,13 @@
 ---
-import { site, metiers } from '../data/site';
+// Questionnaire en plusieurs étapes. Les questions sont dans src/data/questionnaire.ts.
+// Sans JavaScript : toutes les étapes s'affichent l'une sous l'autre et le formulaire s'envoie normalement.
+import { site } from '../data/site';
+import { etapesQuestionnaire, type Question } from '../data/questionnaire';
 import Icone from './Icone.astro';
+
+const total = etapesQuestionnaire.length;
+const id = (e: number, i: number) => `q${e}-${i}`;
+const decrit = (q: Question, cle: string) => [q.aide && `${cle}-aide`, `${cle}-msg`].filter(Boolean).join(' ');
 ---
 
 <section id="maquette" class="section section--alt" aria-labelledby="titre-maquette">
@@ -9,8 +16,8 @@ import Icone from './Icone.astro';
       <p class="surtitre">Maquette gratuite</p>
       <h2 id="titre-maquette" class="titre-2">Recevez votre maquette gratuite.</h2>
       <p class="chapo">
-        Laissez-nous votre numéro. On vous appelle pour convenir des photos, et vous recevez la maquette de
-        votre page d’accueil. Sans engagement.
+        Quelques questions sur votre commerce, environ 3 minutes. Plus vos réponses sont précises, plus la
+        maquette vous ressemblera. On vous rappelle ensuite.
       </p>
       <ul class="form-zone__points" role="list">
         <li><Icone nom="coche" />Gratuit, sans engagement</li>
@@ -18,98 +25,155 @@ import Icone from './Icone.astro';
         <li><Icone nom="coche" />Site en ligne en {site.delai} si vous dites oui</li>
       </ul>
       <p class="form-zone__tel">
-        Vous préférez appeler ?
+        Vous préférez appeler ?
         <a href={`tel:${site.telephoneLien}`}>{site.telephone}</a>
       </p>
     </div>
 
     <div class="carte-form" data-apparition="1">
-      <form
-        class="form"
-        action={site.formulaireAdresse}
-        method="POST"
-        data-formulaire
-        aria-describedby="form-obligatoire"
-      >
+      <form class="form" action={site.formulaireAdresse} method="POST" data-formulaire>
+        <div class="progres" data-progres hidden>
+          <p class="progres__texte" aria-live="polite">
+            Étape <span data-progres-num>1</span> sur {total} · <span data-progres-titre>{etapesQuestionnaire[0].titre}</span>
+          </p>
+          <div class="progres__piste" aria-hidden="true"><span class="progres__barre" data-progres-barre></span></div>
+        </div>
+
         <input type="hidden" name="_subject" value="Nouvelle demande de maquette — Devanture" />
+        <input type="hidden" name="_template" value="table" />
         <!-- Piège anti-robots : invisible pour les humains -->
         <div class="form__piege" aria-hidden="true">
-          <label>Ne pas remplir <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
+          <label>Ne pas remplir <input type="text" name="_honey" tabindex="-1" autocomplete="off" /></label>
         </div>
 
-        <p id="form-obligatoire" class="form__note">Les champs marqués * sont obligatoires.</p>
+        <div class="etapes-form" data-etapes>
+          {
+            etapesQuestionnaire.map((etape, e) => (
+              <fieldset class="etape-form" data-etape={e} data-titre={etape.titre}>
+                <legend class="etape-form__titre" tabindex="-1">
+                  <span class="cache">Étape {e + 1} sur {total} : </span>
+                  {etape.titre}
+                </legend>
+                <p class="etape-form__intro">{etape.intro}</p>
 
-        <div class="champ">
-          <label for="f-nom">Nom du commerce *</label>
-          <input id="f-nom" name="commerce" type="text" required autocomplete="organization" aria-describedby="f-nom-msg" />
-          <p class="champ__msg" id="f-nom-msg"></p>
-        </div>
+                <div class="etape-form__grille">
+                  {etape.questions.map((q, i) => {
+                    const cle = id(e, i);
+                    const etoile = q.requis ? ' *' : '';
+                    const facultatif = !q.requis && !q.aide && q.type !== 'cases' && q.type !== 'choix';
+                    return (
+                      <div class:list={['champ', { 'champ--large': q.large }]}>
+                        {q.type === 'choix' || q.type === 'cases' ? (
+                          <fieldset
+                            class="groupe"
+                            data-groupe={q.type}
+                            data-requis={q.requis ? '' : undefined}
+                            aria-describedby={decrit(q, cle)}
+                            id={cle}
+                          >
+                            <legend class="champ__label">
+                              {q.label}
+                              {etoile}
+                            </legend>
+                            {q.aide && (
+                              <p class="champ__aide" id={`${cle}-aide`}>
+                                {q.aide}
+                              </p>
+                            )}
+                            <div class="options">
+                              {q.options!.map((o, k) => (
+                                <label class="option">
+                                  <input
+                                    type={q.type === 'choix' ? 'radio' : 'checkbox'}
+                                    name={q.nom}
+                                    value={o}
+                                    required={q.requis && q.type === 'choix' && k === 0}
+                                  />
+                                  <span>{o}</span>
+                                </label>
+                              ))}
+                            </div>
+                            <p class="champ__msg" id={`${cle}-msg`} />
+                          </fieldset>
+                        ) : (
+                          <>
+                            <label class="champ__label" for={cle}>
+                              {q.label}
+                              {etoile}
+                              {facultatif && <span class="facultatif"> (facultatif)</span>}
+                            </label>
+                            {q.aide && (
+                              <p class="champ__aide" id={`${cle}-aide`}>
+                                {q.aide}
+                              </p>
+                            )}
+                            {q.type === 'liste' ? (
+                              <select id={cle} name={q.nom} required={q.requis} aria-describedby={decrit(q, cle)}>
+                                <option value="">Choisir…</option>
+                                {q.options!.map((o) => (
+                                  <option>{o}</option>
+                                ))}
+                              </select>
+                            ) : q.type === 'zone' ? (
+                              <textarea
+                                id={cle}
+                                name={q.nom}
+                                rows="3"
+                                required={q.requis}
+                                placeholder={q.exemple}
+                                aria-describedby={decrit(q, cle)}
+                              />
+                            ) : (
+                              <input
+                                id={cle}
+                                name={q.nom}
+                                type={q.type === 'texte' ? 'text' : q.type}
+                                required={q.requis}
+                                placeholder={q.exemple}
+                                autocomplete={q.autocomplete}
+                                inputmode={q.type === 'tel' ? 'tel' : q.type === 'email' ? 'email' : undefined}
+                                data-type={q.type}
+                                aria-describedby={decrit(q, cle)}
+                              />
+                            )}
+                            <p class="champ__msg" id={`${cle}-msg`} />
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
-        <div class="form__ligne">
-          <div class="champ">
-            <label for="f-metier">Métier *</label>
-            <select id="f-metier" name="metier" required aria-describedby="f-metier-msg">
-              <option value="">Choisir…</option>
-              {metiers.map((m) => <option>{m}</option>)}
-            </select>
-            <p class="champ__msg" id="f-metier-msg"></p>
-          </div>
-
-          <div class="champ">
-            <label for="f-quartier">Ville ou arrondissement *</label>
-            <input
-              id="f-quartier"
-              name="quartier"
-              type="text"
-              required
-              autocomplete="address-level2"
-              placeholder="Paris 16e, Puteaux…"
-              aria-describedby="f-quartier-msg"
-            />
-            <p class="champ__msg" id="f-quartier-msg"></p>
-          </div>
-        </div>
-
-        <div class="champ">
-          <label for="f-tel">Téléphone *</label>
-          <input
-            id="f-tel"
-            name="telephone"
-            type="tel"
-            required
-            inputmode="tel"
-            autocomplete="tel"
-            placeholder="06 12 34 56 78"
-            aria-describedby="f-tel-msg"
-          />
-          <p class="champ__msg" id="f-tel-msg"></p>
-        </div>
-
-        <div class="champ">
-          <label for="f-email">E-mail <span class="facultatif">(facultatif)</span></label>
-          <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="f-email-msg" />
-          <p class="champ__msg" id="f-email-msg"></p>
-        </div>
-
-        <div class="champ">
-          <label for="f-message">Message <span class="facultatif">(facultatif)</span></label>
-          <textarea id="f-message" name="message" rows="3" placeholder="Votre adresse, votre Instagram, une question…"></textarea>
-        </div>
-
-        <div class="champ champ--coche">
-          <input id="f-rgpd" name="consentement" type="checkbox" value="oui" required aria-describedby="f-rgpd-msg" />
-          <label for="f-rgpd">
-            J’accepte que Devanture utilise ces informations pour me recontacter au sujet de ma maquette.
-            <a href="/confidentialite">Politique de confidentialité</a>.
-          </label>
-          <p class="champ__msg" id="f-rgpd-msg"></p>
+                {e === total - 1 && (
+                  <div class="champ champ--coche">
+                    <input id="f-rgpd" name="Consentement" type="checkbox" value="Oui" required aria-describedby="f-rgpd-msg" />
+                    <label for="f-rgpd">
+                      J’accepte que Devanture utilise ces informations pour me recontacter au sujet de ma maquette.{' '}
+                      <a href="/confidentialite">Politique de confidentialité</a>.
+                    </label>
+                    <p class="champ__msg" id="f-rgpd-msg" />
+                  </div>
+                )}
+              </fieldset>
+            ))
+          }
         </div>
 
         <p class="form__erreur" data-erreur-globale role="alert"></p>
 
-        <button class="btn btn--principal btn--grand form__envoyer" type="submit">
-          <span data-libelle>Recevoir ma maquette gratuite</span>
-        </button>
+        <div class="form__nav">
+          <button class="btn btn--secondaire" type="button" data-retour hidden>
+            <Icone nom="fleche-gauche" />
+            Retour
+          </button>
+          <button class="btn btn--principal btn--grand" type="button" data-suite hidden>
+            Continuer
+            <Icone nom="fleche" />
+          </button>
+          <button class="btn btn--principal btn--grand form__envoyer" type="submit" data-envoyer>
+            <span data-libelle>Recevoir ma maquette gratuite</span>
+          </button>
+        </div>
       </form>
 
       <div class="confirmation" data-confirmation hidden>
@@ -171,16 +235,77 @@ import Icone from './Icone.astro';
     background: var(--surface);
     border: 1px solid var(--bord);
     box-shadow: var(--ombre-2);
+    scroll-margin-top: calc(var(--nav-h) + var(--e-4));
   }
 
   .form {
     display: grid;
-    gap: var(--e-4);
+    gap: var(--e-5);
   }
 
-  .form__note {
+  .progres[hidden] {
+    display: none;
+  }
+
+  .progres__texte {
     color: var(--texte-2);
     font-size: var(--t-mini);
+    font-weight: 600;
+  }
+
+  .progres__piste {
+    height: 0.375rem;
+    margin-top: var(--e-2);
+    border-radius: var(--r-rond);
+    background: var(--surface-2);
+    border: 1px solid var(--bord);
+    overflow: hidden;
+  }
+
+  .progres__barre {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    transform-origin: left;
+    transform: scaleX(0.2);
+  }
+
+  .etapes-form {
+    display: grid;
+    gap: var(--e-7);
+  }
+
+  .etape-form {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .etape-form[hidden] {
+    display: none;
+  }
+
+  .etape-form__titre {
+    padding: 0;
+    font-size: var(--t-titre-3);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .etape-form__titre:focus {
+    outline: none;
+  }
+
+  .etape-form__intro {
+    margin-top: var(--e-1);
+    color: var(--texte-2);
+  }
+
+  .etape-form__grille {
+    display: grid;
+    gap: var(--e-5) var(--e-4);
+    margin-top: var(--e-5);
   }
 
   .form__piege {
@@ -191,19 +316,22 @@ import Icone from './Icone.astro';
     overflow: hidden;
   }
 
-  .form__ligne {
-    display: grid;
-    gap: var(--e-4);
-  }
-
   .champ {
     display: grid;
     gap: 0.375rem;
+    min-width: 0;
   }
 
-  .champ label {
+  .champ__label {
+    padding: 0;
     font-size: var(--t-petit);
     font-weight: 600;
+  }
+
+  .champ__aide {
+    margin-top: -0.125rem;
+    color: var(--texte-2);
+    font-size: var(--t-mini);
   }
 
   .facultatif {
@@ -211,7 +339,7 @@ import Icone from './Icone.astro';
     font-weight: 400;
   }
 
-  .champ input:not([type='checkbox']),
+  .champ input:is([type='text'], [type='tel'], [type='email']),
   .champ select,
   .champ textarea {
     width: 100%;
@@ -255,7 +383,6 @@ import Icone from './Icone.astro';
   }
 
   .champ__msg {
-    min-height: 0;
     color: var(--erreur);
     font-size: var(--t-mini);
     font-weight: 500;
@@ -265,10 +392,78 @@ import Icone from './Icone.astro';
     display: none;
   }
 
+  .groupe {
+    display: grid;
+    gap: 0.375rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2);
+    margin-top: 0.25rem;
+  }
+
+  .option {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .option input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .option span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--bord-fort);
+    border-radius: var(--r-rond);
+    background: var(--surface);
+    font-size: var(--t-petit);
+    line-height: 1.25;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      transform 120ms ease-out;
+  }
+
+  .option:active span {
+    transform: scale(0.97);
+    transition-duration: 60ms;
+  }
+
+  .option input:checked + span {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--sur-accent);
+    font-weight: 600;
+  }
+
+  .option input:focus-visible + span {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .groupe[aria-invalid='true'] .option span {
+    border-color: var(--erreur);
+  }
+
   .champ--coche {
     grid-template-columns: auto 1fr;
     align-items: start;
     column-gap: var(--e-3);
+    margin-top: var(--e-6);
   }
 
   .champ--coche input {
@@ -279,12 +474,31 @@ import Icone from './Icone.astro';
   }
 
   .champ--coche label {
-    font-weight: 400;
     color: var(--texte-2);
+    font-size: var(--t-petit);
   }
 
   .champ--coche .champ__msg {
     grid-column: 2;
+  }
+
+  .form__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+  }
+
+  .form__nav [hidden] {
+    display: none;
+  }
+
+  .form__nav .btn--principal {
+    flex: 1;
+  }
+
+  .form__envoyer[aria-busy='true'] {
+    opacity: 0.7;
+    pointer-events: none;
   }
 
   .form__erreur:empty {
@@ -298,15 +512,6 @@ import Icone from './Icone.astro';
     color: var(--erreur);
     font-size: var(--t-petit);
     font-weight: 500;
-  }
-
-  .form__envoyer {
-    width: 100%;
-  }
-
-  .form__envoyer[aria-busy='true'] {
-    opacity: 0.7;
-    pointer-events: none;
   }
 
   .confirmation {
@@ -340,19 +545,29 @@ import Icone from './Icone.astro';
   }
 
   @media (min-width: 36rem) {
-    .form__ligne {
+    .etape-form__grille {
       grid-template-columns: 1fr 1fr;
+    }
+
+    .champ--large {
+      grid-column: 1 / -1;
     }
   }
 
   @media (min-width: 60rem) {
     .form-zone {
-      grid-template-columns: 0.9fr 1.1fr;
+      grid-template-columns: 0.8fr 1.2fr;
     }
 
     .form-zone__texte {
       position: sticky;
       top: calc(var(--nav-h) + var(--e-6));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .option:active span {
+      transform: none;
     }
   }
 </style>
