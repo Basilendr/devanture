@@ -1,0 +1,147 @@
+---
+import { site } from '../data/site';
+import Icone from './Icone.astro';
+const annee = new Date().getFullYear();
+---
+
+<footer class="pied">
+  <div class="conteneur pied__grille">
+    <div class="pied__marque">
+      <p class="pied__nom">{site.nom}</p>
+      <p class="pied__promesse">{site.promesse}</p>
+      <p class="pied__texte">
+        Des sites simples et soignés pour les commerces indépendants.
+      </p>
+    </div>
+
+    <div>
+      <h2 class="pied__titre">Contact</h2>
+      <ul role="list" class="pied__liste">
+        <li>
+          <a class="pied__lien" href={`tel:${site.telephoneLien}`}>
+            <Icone nom="telephone" />
+            {site.telephone}
+          </a>
+        </li>
+        <li>
+          <a class="pied__lien" href={`mailto:${site.email}`}>
+            <Icone nom="message" />
+            {site.email}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="pied__titre">Zones couvertes</h2>
+      <ul role="list" class="pied__liste">
+        {site.zones.map((z) => <li>{z}</li>)}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="pied__titre">Informations</h2>
+      <ul role="list" class="pied__liste">
+        <li><a class="pied__lien" href="/mentions-legales">Mentions légales</a></li>
+        <li><a class="pied__lien" href="/confidentialite">Confidentialité</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="conteneur pied__bas">
+    <p>© {annee} {site.nom}. Les sites présentés sont des exemples fictifs.</p>
+  </div>
+</footer>
+
+<style>
+  .pied {
+    padding-block: var(--e-8) var(--e-6);
+    background: var(--fond-2);
+    border-top: 1px solid var(--bord);
+    color: var(--texte-2);
+    font-size: var(--t-petit);
+  }
+
+  .pied__grille {
+    display: grid;
+    gap: var(--e-6);
+    grid-template-columns: 1fr;
+  }
+
+  .pied__nom {
+    color: var(--texte);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .pied__promesse {
+    margin-top: var(--e-1);
+    color: var(--texte);
+  }
+
+  .pied__texte {
+    margin-top: var(--e-3);
+    max-width: 22rem;
+  }
+
+  .pied__titre {
+    margin-bottom: var(--e-3);
+    color: var(--texte);
+    font-size: var(--t-petit);
+    font-weight: 600;
+  }
+
+  .pied__liste {
+    display: grid;
+    gap: var(--e-1);
+  }
+
+  .pied__lien {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-2);
+    min-height: 2.75rem;
+    color: var(--texte-2);
+    text-decoration: none;
+  }
+
+  .pied__lien:hover {
+    color: var(--texte);
+    text-decoration: underline;
+  }
+
+  .pied__lien :global(svg) {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex: none;
+  }
+
+  .pied__bas {
+    margin-top: var(--e-7);
+    padding-top: var(--e-5);
+    border-top: 1px solid var(--bord);
+    font-size: var(--t-mini);
+    color: var(--texte-3);
+  }
+
+  @media (min-width: 40rem) {
+    .pied__grille {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pied__marque {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .pied__grille {
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    }
+
+    .pied__marque {
+      grid-column: auto;
+    }
+  }
+</style>
