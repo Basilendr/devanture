@@ -24,7 +24,7 @@ export const site = {
     hebergementUnique: '[PRIX]', // hébergement + domaine par an pour l'achat unique
   },
 
-  // Adresse d'envoi du formulaire (Formspree : créez un formulaire et collez son identifiant).
+  // Adresse d'envoi du formulaire (Formspree : créez un formulaire et collez son identifiant).
   formulaireAdresse: 'https://formspree.io/f/[ID_FORMSPREE]',
 
   // Mentions légales
@@ -37,7 +37,7 @@ export const site = {
   dureeConservation: '[DURÉE]', // ex. « 3 ans après notre dernier échange »
 };
 
-/** Une valeur est-elle encore à remplacer ? (sert à ne pas publier de fausses données structurées) */
+/** Une valeur est-elle encore à remplacer ? (sert à ne pas publier de fausses données structurées) */
 export const aRemplacer = (valeur: string) => valeur.includes('[');
 
 export const metiers = [
@@ -67,7 +67,7 @@ export const etapes = [
   {
     titre: 'Vous validez',
     texte:
-      'Vous regardez la maquette sur votre téléphone. Un détail ne vous plaît pas ? On le change.',
+      'Vous regardez la maquette sur votre téléphone. Un détail ne vous plaît pas ? On le change.',
   },
   {
     titre: 'Votre site est en ligne',
@@ -89,35 +89,35 @@ export const inclus = [
 
 export const faq = [
   {
-    question: 'Je n’y connais rien en informatique. C’est un problème ?',
+    question: 'Je n’y connais rien en informatique. C’est un problème ?',
     reponse:
-      'Pas du tout. Vous n’avez rien à installer ni à apprendre. Nous faisons tout : textes, photos, mise en ligne. Vous validez simplement sur votre téléphone.',
+      'Pas du tout. Vous n’avez rien à installer ni à apprendre. Nous faisons tout : textes, photos, mise en ligne. Vous validez simplement sur votre téléphone.',
   },
   {
-    question: 'Et si je veux arrêter ?',
+    question: 'Et si je veux arrêter ?',
     reponse:
       'L’abonnement est sans engagement. Vous arrêtez quand vous voulez, par simple message, sans frais. Le nom de domaine reste à votre nom.',
   },
   {
-    question: 'J’ai déjà Instagram. Ça ne suffit pas ?',
+    question: 'J’ai déjà Instagram. Ça ne suffit pas ?',
     reponse:
       'Instagram est utile pour ceux qui vous connaissent déjà. Mais quand quelqu’un cherche « fleuriste Paris 16 » sur Google, il voit d’abord les commerces qui ont un site. Votre site renvoie aussi vers votre Instagram.',
   },
   {
-    question: 'Qui s’occupe des modifications ?',
+    question: 'Qui s’occupe des modifications ?',
     reponse:
-      'Nous. Nouveaux horaires, nouvelle photo, fermeture pour congés : envoyez un message ou appelez, c’est fait. Les petites modifications sont comprises dans l’abonnement.',
+      'Nous. Nouveaux horaires, nouvelle photo, fermeture pour congés : envoyez un message ou appelez, c’est fait. Les petites modifications sont comprises dans l’abonnement.',
   },
   {
-    question: 'Combien de temps ça me prend ?',
+    question: 'Combien de temps ça me prend ?',
     reponse:
-      'Une vingtaine de minutes en tout : un premier échange, l’envoi de quelques photos, puis la validation de la maquette. Nous pouvons aussi passer prendre les photos à la boutique.',
+      'Une vingtaine de minutes en tout : un premier échange, l’envoi de quelques photos, puis la validation de la maquette. Nous pouvons aussi passer prendre les photos à la boutique.',
   },
 ];
 
 /**
  * Exemples par métier — tous FICTIFS, étiquetés « Exemple » sur le site.
- * Pour en ajouter un : créez une maquette dans src/components/maquettes/ et ajoutez-la ici
+ * Pour en ajouter un : créez une maquette dans src/components/maquettes/ et ajoutez-la ici
  * et dans src/components/Exemples.astro.
  */
 export const exemples = [
