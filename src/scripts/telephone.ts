@@ -1,5 +1,5 @@
 import { animate } from 'motion';
-import { SuiviVitesse, elastique, elastiqueInverse, mouvementReduit, DECELERATION } from './mouvement';
+import { SuiviVitesse, elastique, elastiqueInverse, mouvementReduit, projeter, DECELERATION } from './mouvement';
 
 type Controle = { stop: () => void };
 
@@ -78,7 +78,11 @@ function brancher(racine: HTMLElement) {
       return;
     }
 
-    anim = animate(y, y, {
+    // Motion ignore une animation dont le départ et l'arrivée sont égaux : on lui donne
+    // le point projeté (ou le bord, si l'on relâche dans l'élastique). L'inertie recalcule
+    // de toute façon son arrivée à partir de la vitesse.
+    const projete = y + projeter(vitesse);
+    anim = animate(y, projete !== y ? projete : borne(y), {
       type: 'inertia',
       velocity: vitesse,
       // Même projection qu'Apple : arrivée = position + (v/1000)·d/(1−d)
