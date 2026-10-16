@@ -1,0 +1,16 @@
+{
+  "name": "devanture",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:visuel": "node scripts/verifier.mjs"
+  },
+  "dependencies": {
+    "astro": "7.4.0",
+    "motion": "14.3.0"
+  }
+}
