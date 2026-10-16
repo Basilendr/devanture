@@ -1,9 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// [DOMAINE] — remplacez par votre vrai domaine quand vous l'aurez (ex. https://devanture.fr).
-// Il sert au plan du site, aux liens de partage et aux données structurées.
-export const DOMAINE = 'https://devanture.example';
+// Adresse publique du site. Si vous prenez un nom de domaine (ex. https://devanture.fr), changez-la ici :
+// elle sert au plan du site, aux liens de partage, aux données structurées et au formulaire
+// (FormSubmit demandera alors une nouvelle activation par e-mail, voir README).
+export const DOMAINE = 'https://devanture-seven.vercel.app';
 
 export default defineConfig({
   site: DOMAINE,

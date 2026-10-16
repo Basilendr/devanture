@@ -1,5 +1,5 @@
 // Petit serveur local du dossier dist/, avec les mêmes adresses propres et la même compression que Vercel.
-// Usage : node scripts/serveur.mjs  (puis http://localhost:4322)
+// Usage : node scripts/serveur.mjs  (puis http://127.0.0.1:4390)
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname, join } from 'node:path';
@@ -7,7 +7,7 @@ import { gzipSync } from 'node:zlib';
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.xml': 'application/xml', '.txt': 'text/plain' };
 
-export function demarrer(port = 4322) {
+export function demarrer(port = 4390) {
   return createServer(async (req, res) => {
     let chemin = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     if (chemin === '/') chemin = '/index.html';
@@ -27,10 +27,15 @@ export function demarrer(port = 4322) {
     }
     res.writeHead(statut, entetes);
     res.end(corps);
-  }).listen(port);
+  })
+    .on('error', (e) => {
+      console.error(`Port ${port} indisponible : ${e.message}`);
+      process.exit(1);
+    })
+    .listen(port, '127.0.0.1');
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   demarrer();
-  console.log('http://localhost:4322');
+  console.log('http://127.0.0.1:4390');
 }

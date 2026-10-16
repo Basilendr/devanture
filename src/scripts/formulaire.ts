@@ -205,7 +205,8 @@ function brancher(form: HTMLFormElement) {
     envoyer.setAttribute('aria-busy', 'true');
     libelle.textContent = 'Envoi en cours…';
     try {
-      const reponse = await fetch(form.action, {
+      // formsubmit.co/adresse → formsubmit.co/ajax/adresse : réponse en JSON, sans quitter la page
+      const reponse = await fetch(form.action.replace('formsubmit.co/', 'formsubmit.co/ajax/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(construireEmail()),

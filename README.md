@@ -46,10 +46,12 @@ retirez ou reformulez une question, le site et l'e-mail suivent tout seuls.
 métier et la ville ; le corps contient un « Résumé complet » prêt à copier, puis chaque réponse dans
 un tableau. « Répondre » écrit directement au client s'il a donné son e-mail.
 
-L'envoi passe par une petite fonction Vercel, [`api/maquette.js`](api/maquette.js), qui transmet à
-FormSubmit avec une adresse de site fixe, déjà activée : il marche quelle que soit l'adresse du site
-(préversions, futur nom de domaine). Pour changer d'adresse de réception, modifiez `DESTINATAIRE`
-dans ce fichier ; FormSubmit enverra alors un e-mail « Activate Form » à confirmer une fois.
+**Activation** : FormSubmit demande de confirmer une fois chaque adresse de site. La première demande
+envoyée depuis une nouvelle adresse (par exemple le jour où vous prenez un nom de domaine) déclenche un
+e-mail « Activate Form » sur `devanture.paris@gmail.com` : cliquez sur le lien, et c'est réglé pour de
+bon. Les préversions Vercel (adresses différentes) ne sont pas activées : testez le formulaire sur
+l'adresse principale. Pour changer d'adresse de réception, modifiez `formulaireAdresse` dans
+`src/data/site.ts`.
 
 Un champ piège invisible (`_honey`) bloque les robots.
 

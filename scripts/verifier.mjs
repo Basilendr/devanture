@@ -7,7 +7,7 @@ import { mkdirSync } from 'node:fs';
 import { demarrer } from './serveur.mjs';
 
 const serveur = demarrer();
-const URL_SITE = process.env.URL_SITE || 'http://localhost:4322';
+const URL_SITE = process.env.URL_SITE || 'http://127.0.0.1:4390';
 mkdirSync('captures', { recursive: true });
 const navigateur = await chromium.launch();
 const resultats = [];
@@ -133,14 +133,14 @@ for (const largeur of [375, 768, 1440]) {
   ok('Questionnaire : consentement exigé', (await p.textContent('#f-rgpd-msg')).length > 0);
   await p.check('#f-rgpd');
   let envoye = null;
-  await p.route('**/api/maquette', (r) => {
+  await p.route('https://formsubmit.co/**', (r) => {
     envoye = { url: r.request().url(), corps: r.request().postDataJSON() };
     r.fulfill({ status: 200, contentType: 'application/json', body: '{"success":"true"}' });
   });
   await p.click('[data-envoyer]');
   await pause(600);
   ok('Questionnaire : confirmation affichée', await p.isVisible('[data-confirmation]'));
-  ok('Questionnaire : un seul e-mail vers l’adresse du site', envoye?.url?.endsWith('/api/maquette'));
+  ok('Questionnaire : un seul e-mail vers l’adresse du site', envoye?.url === 'https://formsubmit.co/ajax/devanture.paris@gmail.com');
   ok('Questionnaire : toutes les réponses dans l’e-mail',
     envoye?.corps?.['Présence en ligne'] === 'Fiche Google (Maps), Instagram' && envoye?.corps?.['Contenu souhaité'] === 'Horaires',
     envoye?.corps?._subject);

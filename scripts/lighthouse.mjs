@@ -8,7 +8,7 @@ const serveur = demarrer();
 try {
   // Asynchrone : le serveur, dans ce même processus, doit pouvoir répondre pendant l'analyse
   await new Promise((ok, ko) =>
-    spawn('npx', ['lighthouse', 'http://localhost:4322/', '--quiet', '--chrome-flags=--headless=new', '--output=json', '--output-path=captures/lighthouse.json'], {
+    spawn('npx', ['lighthouse', 'http://127.0.0.1:4390/', '--quiet', '--chrome-flags=--headless=new', '--output=json', '--output-path=captures/lighthouse.json'], {
     env: { ...process.env, CHROME_PATH: chromium.executablePath() },
     stdio: 'inherit',
     }).on('exit', (code) => (code === 0 ? ok() : ko(new Error(`Lighthouse : code ${code}`)))),
