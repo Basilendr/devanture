@@ -11,7 +11,7 @@ import FormulaireMaquette from '../components/FormulaireMaquette.astro';
 import { site, faq, aRemplacer } from '../data/site';
 
 const url = Astro.site!.href.replace(/\/$/, '');
-const zones = site.zones.map((name) => ({ '@type': 'Place', name }));
+const zones = { '@type': 'AdministrativeArea', name: 'Île-de-France' };
 
 // Les valeurs encore « [À REMPLACER] » ne sont pas publiées dans les données structurées.
 const entreprise: Record<string, unknown> = {
@@ -29,25 +29,6 @@ if (!aRemplacer(site.telephoneLien)) entreprise.telephone = site.telephoneLien;
 if (!aRemplacer(site.email)) entreprise.email = site.email;
 if (!aRemplacer(site.editeur.adresse)) entreprise.address = site.editeur.adresse;
 
-const offres = [
-  { nom: 'Abonnement mensuel sans engagement', prix: site.prix.mensuel, mensuel: true },
-  { nom: 'Achat unique', prix: site.prix.unique, mensuel: false },
-]
-  .filter((o) => !aRemplacer(o.prix))
-  .map((o) => ({
-    '@type': 'Offer',
-    name: o.nom,
-    price: o.prix,
-    priceCurrency: 'EUR',
-    ...(o.mensuel && {
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        price: o.prix,
-        priceCurrency: 'EUR',
-        unitCode: 'MON',
-      },
-    }),
-  }));
 
 const service = {
   '@context': 'https://schema.org',
@@ -57,8 +38,7 @@ const service = {
   provider: { '@id': `${url}/#entreprise` },
   areaServed: zones,
   description:
-    'Site web clair et lisible sur téléphone pour fleuristes, traiteurs, galeries, instituts, garages, restaurants et autres commerces indépendants. Maquette gratuite, mise en ligne en 7 jours.',
-  ...(offres.length && { offers: offres }),
+    'Site web clair et lisible sur téléphone pour fleuristes, traiteurs, galeries, instituts, garages, restaurants et autres commerces indépendants. Maquette gratuite, mise en ligne en 2 à 3 jours.',
 };
 
 const questions = {
@@ -73,7 +53,7 @@ const questions = {
 ---
 
 <Base
-  titre="Devanture — Site web pour commerces à Puteaux, La Défense, Paris 8e et 16e"
+  titre="Devanture — Site web pour commerces à Paris et en Île-de-France"
   donnees={[entreprise, service, questions]}
 >
   <Hero />

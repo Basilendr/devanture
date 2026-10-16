@@ -9,10 +9,10 @@ import MaquetteSite from './maquettes/MaquetteSite.astro';
 <section class="heros" aria-labelledby="titre-heros">
   <div class="conteneur heros__grille">
     <div class="heros__texte">
-      <p class="surtitre">Sites web pour commerces indépendants · {site.zones.join(', ').replace(/, ([^,]*)$/, ' et $1')}</p>
+      <p class="surtitre">Sites web pour commerces indépendants · {site.region}</p>
       <h1 id="titre-heros" class="titre-1">{site.promesse}</h1>
       <p class="chapo heros__chapo">
-        Un site simple et soigné pour votre commerce, en ligne en {site.delaiJours} jours. On vous montre
+        Un site simple et soigné pour votre commerce, en ligne en {site.delai}. On vous montre
         d’abord la maquette, gratuitement.
       </p>
       <div class="heros__actions">
@@ -25,7 +25,7 @@ import MaquetteSite from './maquettes/MaquetteSite.astro';
       <ul class="heros__garanties" role="list">
         <li><Icone nom="coche" />Maquette gratuite</li>
         <li><Icone nom="coche" />Sans engagement</li>
-        <li><Icone nom="coche" />En ligne en {site.delaiJours} jours</li>
+        <li><Icone nom="coche" />En ligne en {site.delai}</li>
       </ul>
     </div>
 

@@ -34,9 +34,8 @@ const annee = new Date().getFullYear();
 
     <div>
       <h2 class="pied__titre">Zones couvertes</h2>
-      <ul role="list" class="pied__liste">
-        {site.zones.map((z) => <li>{z}</li>)}
-      </ul>
+      <p>{site.region} :</p>
+      <p class="pied__zones">{site.zones.join(', ')}.</p>
     </div>
 
     <div>
@@ -115,6 +114,11 @@ const annee = new Date().getFullYear();
     width: 1.125rem;
     height: 1.125rem;
     flex: none;
+  }
+
+  .pied__zones {
+    margin-top: var(--e-1);
+    color: var(--texte-3);
   }
 
   .pied__bas {

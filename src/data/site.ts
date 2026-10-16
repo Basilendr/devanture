@@ -8,21 +8,18 @@ export const site = {
   nom: 'Devanture',
   promesse: 'Votre devanture, aussi sur Google.',
   description:
-    'Devanture crée le site web des commerces indépendants à Puteaux, La Défense, Paris 8e et Paris 16e. Maquette gratuite, site en ligne en 7 jours, sans engagement.',
+    'Devanture crée le site web des commerces indépendants à Paris et dans toute l’Île-de-France. Maquette gratuite, site en ligne en 2 à 3 jours, sans engagement.',
 
   // Contact — téléphone au format affiché ET au format lien (sans espaces, avec +33).
-  telephone: '[TÉLÉPHONE]', // ex. « 06 12 34 56 78 »
-  telephoneLien: '[TÉLÉPHONE]', // ex. « +33612345678 »
-  email: '[EMAIL]',
+  telephone: '07 69 75 14 79',
+  telephoneLien: '+33769751479',
+  email: 'devanture.paris@gmail.com',
 
-  zones: ['Puteaux', 'La Défense', 'Paris 8e', 'Paris 16e'],
-  delaiJours: 7,
+  region: 'Paris et toute l’Île-de-France',
+  zones: ['Paris', 'Hauts-de-Seine', 'Seine-Saint-Denis', 'Val-de-Marne', 'Yvelines', 'Essonne', 'Seine-et-Marne', 'Val-d’Oise'],
+  delai: '2 à 3 jours',
 
-  prix: {
-    mensuel: '[PRIX]', // ex. « 59 » → affiché « 59 € / mois »
-    unique: '[PRIX]', // ex. « 990 » → affiché « 990 € »
-    hebergementUnique: '[PRIX]', // hébergement + domaine par an pour l'achat unique
-  },
+  // Pas de prix affiché : il dépend de la demande, le client appelle pour le connaître.
 
   // Adresse d'envoi du formulaire (Formspree : créez un formulaire et collez son identifiant).
   formulaireAdresse: 'https://formspree.io/f/[ID_FORMSPREE]',
@@ -71,7 +68,7 @@ export const etapes = [
   },
   {
     titre: 'Votre site est en ligne',
-    texte: 'Sept jours plus tard, vos clients vous trouvent sur Google et vous appellent en un geste.',
+    texte: '2 à 3 jours plus tard, vos clients vous trouvent sur Google et vous appellent en un geste.',
   },
 ];
 

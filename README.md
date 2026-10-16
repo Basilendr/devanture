@@ -1,7 +1,7 @@
 # Devanture
 
-Site vitrine de Devanture : des sites web pour les commerces indépendants (Puteaux, La Défense,
-Paris 8e et 16e). Promesse : « Votre devanture, aussi sur Google. »
+Site vitrine de Devanture : des sites web pour les commerces indépendants, à Paris et dans toute
+l’Île-de-France. Promesse : « Votre devanture, aussi sur Google. »
 
 Une seule page longue, plus `/mentions-legales` et `/confidentialite`. Site statique construit avec
 [Astro](https://astro.build), animations avec [Motion](https://motion.dev). Hébergement sur Vercel.
@@ -12,7 +12,7 @@ Une seule page longue, plus `/mentions-legales` et `/confidentialite`. Site stat
 
 | Vous voulez changer… | Où |
 |---|---|
-| Prix, téléphone, e-mail, zones, délai | `src/data/site.ts`, en haut (`site`) |
+| Téléphone, e-mail, zones, délai de mise en ligne | `src/data/site.ts`, en haut (`site`) |
 | Mentions légales (nom, SIRET, adresse, statut) | `src/data/site.ts` → `site.editeur` |
 | Étapes, « Ce qui est inclus », questions fréquentes | `src/data/site.ts` → `etapes`, `inclus`, `faq` |
 | Liste des métiers du formulaire | `src/data/site.ts` → `metiers` |
@@ -26,17 +26,15 @@ Une seule page longue, plus `/mentions-legales` et `/confidentialite`. Site stat
 
 Cherchez `[` dans le projet : chaque valeur entre crochets est à remplir.
 
-- `[PRIX]` ×3 : abonnement mensuel, achat unique, hébergement annuel de l'achat unique
-- `[TÉLÉPHONE]` ×2 : affiché (`06 12 34 56 78`) et pour le lien d'appel (`+33612345678`)
-- `[EMAIL]`
 - `[NOM PRÉNOM]`, `[STATUT JURIDIQUE]`, `[SIRET]`, `[ADRESSE]`
 - `[DURÉE]` : durée de conservation des demandes (ex. « 3 ans après notre dernier échange »)
 - `[ID_FORMSPREE]` : voir « Formulaire » ci-dessous
 - `[DOMAINE]` dans `astro.config.mjs`
 - `[DATE]` et la mention de TVA dans les deux pages légales
 
+Aucun prix n'est affiché : les cartes de tarifs invitent à appeler pour connaître le prix.
 Tant qu'une valeur n'est pas remplie, elle n'est **pas** envoyée à Google dans les données
-structurées (pas de faux numéro ni de faux prix publiés).
+structurées.
 
 ### Formulaire
 

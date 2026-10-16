@@ -15,7 +15,7 @@ import Icone from './Icone.astro';
       <ul class="form-zone__points" role="list">
         <li><Icone nom="coche" />Gratuit, sans engagement</li>
         <li><Icone nom="coche" />Faite avec les photos de votre commerce</li>
-        <li><Icone nom="coche" />Site en ligne en {site.delaiJours} jours si vous dites oui</li>
+        <li><Icone nom="coche" />Site en ligne en {site.delai} si vous dites oui</li>
       </ul>
       <p class="form-zone__tel">
         Vous préférez appeler ?
@@ -56,12 +56,16 @@ import Icone from './Icone.astro';
           </div>
 
           <div class="champ">
-            <label for="f-quartier">Quartier *</label>
-            <select id="f-quartier" name="quartier" required aria-describedby="f-quartier-msg">
-              <option value="">Choisir…</option>
-              {site.zones.map((z) => <option>{z}</option>)}
-              <option>Autre secteur</option>
-            </select>
+            <label for="f-quartier">Ville ou arrondissement *</label>
+            <input
+              id="f-quartier"
+              name="quartier"
+              type="text"
+              required
+              autocomplete="address-level2"
+              placeholder="Paris 16e, Puteaux…"
+              aria-describedby="f-quartier-msg"
+            />
             <p class="champ__msg" id="f-quartier-msg"></p>
           </div>
         </div>

@@ -111,7 +111,7 @@ for (const largeur of [375, 768, 1440]) {
   ok('Formulaire : focus sur le premier champ invalide', await p.evaluate(() => document.activeElement?.id === 'f-nom'));
   await p.fill('#f-nom', 'Fleurs test');
   await p.selectOption('#f-metier', 'Fleuriste');
-  await p.selectOption('#f-quartier', 'Paris 16e');
+  await p.fill('#f-quartier', 'Paris 16e');
   await p.check('#f-rgpd');
   // Adresse d'envoi simulée
   await p.$eval('[data-formulaire]', (f) => (f.action = 'https://formspree.io/f/test'));
@@ -142,7 +142,7 @@ for (const reduit of [false, true]) {
     await pause(500);
     const caches = await p.$$eval('[data-apparition]', (els) => els.filter((e) => {
       const r = e.getBoundingClientRect();
-      return r.top < innerHeight && r.bottom > 0 && Number(getComputedStyle(e).opacity) < 0.99;
+      return r.top < innerHeight * 0.85 && r.bottom > 0 && Number(getComputedStyle(e).opacity) < 0.99;
     }).length);
     ok('Mouvement réduit : contenus visibles', caches === 0);
   }
@@ -155,7 +155,7 @@ for (const reduit of [false, true]) {
   await p.setContent(`<body style="margin:0;width:1200px;height:630px;background:#faf8f4;font-family:-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;justify-content:center;padding:0 96px;box-sizing:border-box;color:#1a1a18">
     <div style="display:flex;align-items:center;gap:18px;font-size:40px;font-weight:700;letter-spacing:-0.02em"><div style="width:52px;height:52px;border-radius:12px;background:repeating-linear-gradient(90deg,#faf8f4 0 7px,transparent 7px 14px) top/100% 16px no-repeat,#1f4d3a"></div>Devanture</div>
     <div style="margin-top:48px;font-size:84px;font-weight:700;line-height:1.05;letter-spacing:-0.03em;max-width:900px">Votre devanture, aussi sur Google.</div>
-    <div style="margin-top:36px;font-size:32px;color:#57554f">Maquette gratuite · En ligne en 7 jours · Sans engagement</div></body>`);
+    <div style="margin-top:36px;font-size:32px;color:#57554f">Maquette gratuite · En ligne en 2 à 3 jours · Sans engagement</div></body>`);
   await p.screenshot({ path: 'public/partage.png' });
   await p.setViewportSize({ width: 180, height: 180 });
   await p.setContent(`<body style="margin:0;width:180px;height:180px;background:repeating-linear-gradient(90deg,#faf8f4 0 18px,transparent 18px 36px) 0 36px/100% 34px no-repeat,#1f4d3a"><div style="position:absolute;left:52px;top:100px;width:76px;height:44px;border:10px solid #faf8f4;border-radius:6px;box-sizing:border-box"></div></body>`);

@@ -9,7 +9,7 @@ const chiffres = (v: string) => v.replace(/[\s.\-()]/g, '');
 const regles: Record<string, Regle> = {
   commerce: (v) => (v.trim().length < 2 ? 'Indiquez le nom de votre commerce.' : ''),
   metier: (v) => (!v ? 'Choisissez votre métier.' : ''),
-  quartier: (v) => (!v ? 'Choisissez votre quartier.' : ''),
+  quartier: (v) => (v.trim().length < 2 ? 'Indiquez votre ville ou votre arrondissement.' : ''),
   telephone: (v) => {
     if (!v.trim()) return 'Indiquez un numéro pour que l’on puisse vous rappeler.';
     return /^(?:\+33|0033|0)[1-9]\d{8}$/.test(chiffres(v))

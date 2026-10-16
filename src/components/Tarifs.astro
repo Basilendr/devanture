@@ -5,11 +5,10 @@ import Icone from './Icone.astro';
 const offres = [
   {
     nom: 'Abonnement',
-    prix: site.prix.mensuel,
-    unite: '/ mois',
+    unite: 'par mois',
     phrase: 'Tout compris. Vous n’avez rien à gérer.',
     points: [
-      'Création du site et mise en ligne en 7 jours',
+      `Création du site et mise en ligne en ${site.delai}`,
       'Hébergement et nom de domaine',
       'Mises à jour et sécurité',
       'Petites modifications comprises',
@@ -18,12 +17,11 @@ const offres = [
   },
   {
     nom: 'Achat unique',
-    prix: site.prix.unique,
-    unite: 'une fois',
+    unite: 'une seule fois',
     phrase: 'Vous payez le site une fois, il est à vous.',
     points: [
-      'Création du site et mise en ligne en 7 jours',
-      `Hébergement et nom de domaine : ${site.prix.hebergementUnique} € / an`,
+      `Création du site et mise en ligne en ${site.delai}`,
+      'Hébergement et nom de domaine en option, à l’année',
       'Modifications ensuite sur devis',
     ],
     principal: false,
@@ -35,8 +33,8 @@ const offres = [
   <div class="conteneur">
     <div class="entete-section entete-section--centre" data-apparition>
       <p class="surtitre">Tarifs</p>
-      <h2 id="titre-tarifs" class="titre-2">Un prix clair. Sans engagement.</h2>
-      <p class="chapo">La maquette est gratuite dans les deux cas. Vous choisissez après l’avoir vue.</p>
+      <h2 id="titre-tarifs" class="titre-2">Un prix adapté à votre commerce.</h2>
+      <p class="chapo">Le prix dépend de ce dont vous avez besoin. Appelez-nous pour le connaître. La maquette, elle, est toujours gratuite.</p>
     </div>
 
     <div class="tarifs">
@@ -48,7 +46,7 @@ const offres = [
               <span class="offre__sans">Sans engagement</span>
             </div>
             <p class="offre__prix">
-              <span class="offre__montant">{o.prix} €</span>
+              <span class="offre__montant">Sur devis</span>
               <span class="offre__unite">{o.unite}</span>
             </p>
             <p class="offre__phrase">{o.phrase}</p>
@@ -60,8 +58,9 @@ const offres = [
                 </li>
               ))}
             </ul>
-            <a class:list={['btn', o.principal ? 'btn--principal' : 'btn--secondaire']} href="#maquette">
-              Recevoir ma maquette gratuite
+            <a class:list={['btn', o.principal ? 'btn--principal' : 'btn--secondaire']} href={`tel:${site.telephoneLien}`}>
+              <Icone nom="telephone" />
+              Appeler pour connaître le prix
             </a>
           </article>
         ))
