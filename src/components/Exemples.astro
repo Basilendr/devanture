@@ -1,0 +1,159 @@
+---
+import { exemples } from '../data/site';
+import { maquettes } from '../data/maquettes';
+import Icone from './Icone.astro';
+import MaquetteSite from './maquettes/MaquetteSite.astro';
+---
+
+<section id="exemples" class="section section--alt exemples" aria-labelledby="titre-exemples">
+  <div class="conteneur exemples__entete" data-apparition>
+    <div>
+      <p class="surtitre">Exemples par métier</p>
+      <h2 id="titre-exemples" class="titre-2">À quoi pourrait ressembler le vôtre.</h2>
+      <p class="chapo">
+        Des exemples fictifs, pour vous donner une idée. Le vôtre sera fait avec les photos de votre commerce.
+      </p>
+    </div>
+    <div class="exemples__fleches">
+      <button class="btn-icone" type="button" data-precedent aria-controls="piste-exemples">
+        <Icone nom="fleche-gauche" />
+        <span class="cache">Exemple précédent</span>
+      </button>
+      <button class="btn-icone" type="button" data-suivant aria-controls="piste-exemples">
+        <Icone nom="fleche-droite" />
+        <span class="cache">Exemple suivant</span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="carrousel"
+    data-carrousel
+    tabindex="0"
+    role="region"
+    aria-roledescription="carrousel"
+    aria-label="Exemples de sites par métier. Glissez ou utilisez les flèches."
+  >
+    <ul class="carrousel__piste" id="piste-exemples" role="list" data-piste>
+      {
+        exemples.map((ex, i) => (
+          <li class="carte-ex" aria-roledescription="diapositive" aria-label={`${i + 1} sur ${exemples.length}`}>
+            <div class="carte-ex__haut">
+              <span class="carte-ex__metier">{ex.metier}</span>
+              <span class="etiquette">Exemple</span>
+            </div>
+            <div
+              class="carte-ex__apercu"
+              role="img"
+              aria-label={`Exemple fictif de site pour un ${ex.metier.toLowerCase()} : ${ex.resume}.`}
+            >
+              <MaquetteSite m={maquettes[ex.id]} />
+            </div>
+            <p class="carte-ex__nom">
+              « {ex.nom} » <span>— {ex.resume}</span>
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <p class="cache" aria-live="polite" data-statut></p>
+</section>
+
+<style>
+  .exemples__entete {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--e-5);
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .exemples__entete > div:first-child {
+    max-width: 38rem;
+  }
+
+  .exemples__entete .chapo {
+    margin-top: var(--e-4);
+  }
+
+  .exemples__fleches {
+    display: flex;
+    gap: var(--e-2);
+  }
+
+  .carrousel {
+    overflow: hidden;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+
+  .carrousel:focus-visible {
+    outline-offset: -3px;
+  }
+
+  .carrousel[data-saisi] {
+    cursor: grabbing;
+  }
+
+  .carrousel__piste {
+    display: flex;
+    gap: var(--e-5);
+    width: max-content;
+    padding-block: var(--e-2) var(--e-6);
+    padding-inline: max(var(--marge), calc((100vw - var(--largeur)) / 2));
+    user-select: none;
+    -webkit-user-select: none;
+    will-change: transform;
+  }
+
+  .carte-ex {
+    width: min(18rem, 78vw);
+    flex: none;
+  }
+
+  .carte-ex__haut {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--e-3);
+  }
+
+  .carte-ex__metier {
+    font-weight: 600;
+  }
+
+  .carte-ex__apercu {
+    position: relative;
+    height: 27rem;
+    padding: 0.5rem;
+    border-radius: 2.25rem;
+    background: var(--appareil);
+    box-shadow: var(--ombre-2);
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .carte-ex__apercu > :global(.ms) {
+    height: 100%;
+    border-radius: 1.75rem;
+    overflow: hidden;
+  }
+
+  .carte-ex__nom {
+    margin-top: var(--e-4);
+    font-weight: 600;
+    font-size: var(--t-petit);
+  }
+
+  .carte-ex__nom span {
+    color: var(--texte-2);
+    font-weight: 400;
+  }
+</style>
+
+<script>
+  import { brancherCarrousels } from '../scripts/carrousel';
+  brancherCarrousels();
+</script>

@@ -1,0 +1,45 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../data/site';
+const domaine = Astro.site!.host;
+---
+
+<Legal titre="Mentions légales — Devanture" description="Mentions légales du site Devanture." h1="Mentions légales">
+  <p>Dernière mise à jour : [DATE].</p>
+
+  <h2>Éditeur du site</h2>
+  <p>
+    Le site {domaine} est édité par <strong>{site.editeur.nom}</strong>, {site.editeur.statut}.<br />
+    SIRET : {site.editeur.siret}<br />
+    Adresse : {site.editeur.adresse}<br />
+    Téléphone : <a href={`tel:${site.telephoneLien}`}>{site.telephone}</a><br />
+    E-mail : <a href={`mailto:${site.email}`}>{site.email}</a>
+  </p>
+  <p>Directeur de la publication : {site.editeur.nom}.</p>
+  <p>[TVA : « TVA non applicable, article 293 B du CGI » si micro-entreprise, sinon numéro de TVA intracommunautaire.]</p>
+
+  <h2>Hébergement</h2>
+  <p>
+    Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis.<br />
+    Site : <a href="https://vercel.com" rel="noopener">vercel.com</a>
+  </p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>
+    Les textes, illustrations et la mise en page de ce site appartiennent à {site.editeur.nom}. Toute reproduction
+    sans autorisation est interdite.
+  </p>
+  <p>
+    Les sites de commerce présentés comme « Exemple » sont <strong>fictifs</strong> : les noms, adresses et prix qui
+    y figurent sont inventés et ne désignent aucun commerce réel.
+  </p>
+
+  <h2>Données personnelles</h2>
+  <p>
+    Le traitement des informations envoyées par le formulaire est décrit dans la
+    <a href="/confidentialite">politique de confidentialité</a>.
+  </p>
+
+  <h2>Cookies</h2>
+  <p>Ce site n’utilise ni cookie publicitaire ni outil de mesure d’audience.</p>
+</Legal>

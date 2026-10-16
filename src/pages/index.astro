@@ -1,4 +1,87 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Probleme from '../components/Probleme.astro';
+import Etapes from '../components/Etapes.astro';
+import Exemples from '../components/Exemples.astro';
+import Inclus from '../components/Inclus.astro';
+import Tarifs from '../components/Tarifs.astro';
+import FAQ from '../components/FAQ.astro';
+import FormulaireMaquette from '../components/FormulaireMaquette.astro';
+import { site, faq, aRemplacer } from '../data/site';
+
+const url = Astro.site!.href.replace(/\/$/, '');
+const zones = site.zones.map((name) => ({ '@type': 'Place', name }));
+
+// Les valeurs encore « [À REMPLACER] » ne sont pas publiées dans les données structurées.
+const entreprise: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${url}/#entreprise`,
+  name: site.nom,
+  slogan: site.promesse,
+  description: site.description,
+  url,
+  image: `${url}/partage.png`,
+  areaServed: zones,
+};
+if (!aRemplacer(site.telephoneLien)) entreprise.telephone = site.telephoneLien;
+if (!aRemplacer(site.email)) entreprise.email = site.email;
+if (!aRemplacer(site.editeur.adresse)) entreprise.address = site.editeur.adresse;
+
+const offres = [
+  { nom: 'Abonnement mensuel sans engagement', prix: site.prix.mensuel, mensuel: true },
+  { nom: 'Achat unique', prix: site.prix.unique, mensuel: false },
+]
+  .filter((o) => !aRemplacer(o.prix))
+  .map((o) => ({
+    '@type': 'Offer',
+    name: o.nom,
+    price: o.prix,
+    priceCurrency: 'EUR',
+    ...(o.mensuel && {
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: o.prix,
+        priceCurrency: 'EUR',
+        unitCode: 'MON',
+      },
+    }),
+  }));
+
+const service = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Création de site web pour commerce indépendant',
+  serviceType: 'Création de site web',
+  provider: { '@id': `${url}/#entreprise` },
+  areaServed: zones,
+  description:
+    'Site web clair et lisible sur téléphone pour fleuristes, traiteurs, galeries, instituts, garages, restaurants et autres commerces indépendants. Maquette gratuite, mise en ligne en 7 jours.',
+  ...(offres.length && { offers: offres }),
+};
+
+const questions = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((q) => ({
+    '@type': 'Question',
+    name: q.question,
+    acceptedAnswer: { '@type': 'Answer', text: q.reponse },
+  })),
+};
 ---
-<Base titre="Devanture"><section class="section conteneur"><h1 class="titre-1">Test</h1></section></Base>
+
+<Base
+  titre="Devanture — Site web pour commerces à Puteaux, La Défense, Paris 8e et 16e"
+  donnees={[entreprise, service, questions]}
+>
+  <Hero />
+  <Probleme />
+  <Etapes />
+  <Exemples />
+  <Inclus />
+  <Tarifs />
+  <FAQ />
+  <FormulaireMaquette />
+</Base>

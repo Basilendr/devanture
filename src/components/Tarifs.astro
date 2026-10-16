@@ -1,0 +1,163 @@
+---
+import { site } from '../data/site';
+import Icone from './Icone.astro';
+
+const offres = [
+  {
+    nom: 'Abonnement',
+    prix: site.prix.mensuel,
+    unite: '/ mois',
+    phrase: 'Tout compris. Vous n’avez rien à gérer.',
+    points: [
+      'Création du site et mise en ligne en 7 jours',
+      'Hébergement et nom de domaine',
+      'Mises à jour et sécurité',
+      'Petites modifications comprises',
+    ],
+    principal: true,
+  },
+  {
+    nom: 'Achat unique',
+    prix: site.prix.unique,
+    unite: 'une fois',
+    phrase: 'Vous payez le site une fois, il est à vous.',
+    points: [
+      'Création du site et mise en ligne en 7 jours',
+      `Hébergement et nom de domaine : ${site.prix.hebergementUnique} € / an`,
+      'Modifications ensuite sur devis',
+    ],
+    principal: false,
+  },
+];
+---
+
+<section id="tarifs" class="section section--alt" aria-labelledby="titre-tarifs">
+  <div class="conteneur">
+    <div class="entete-section entete-section--centre" data-apparition>
+      <p class="surtitre">Tarifs</p>
+      <h2 id="titre-tarifs" class="titre-2">Un prix clair. Sans engagement.</h2>
+      <p class="chapo">La maquette est gratuite dans les deux cas. Vous choisissez après l’avoir vue.</p>
+    </div>
+
+    <div class="tarifs">
+      {
+        offres.map((o, i) => (
+          <article class:list={['offre', { 'offre--principale': o.principal }]} data-apparition={i}>
+            <div class="offre__haut">
+              <h3 class="titre-3">{o.nom}</h3>
+              <span class="offre__sans">Sans engagement</span>
+            </div>
+            <p class="offre__prix">
+              <span class="offre__montant">{o.prix} €</span>
+              <span class="offre__unite">{o.unite}</span>
+            </p>
+            <p class="offre__phrase">{o.phrase}</p>
+            <ul class="offre__points" role="list">
+              {o.points.map((p) => (
+                <li>
+                  <Icone nom="coche" />
+                  {p}
+                </li>
+              ))}
+            </ul>
+            <a class:list={['btn', o.principal ? 'btn--principal' : 'btn--secondaire']} href="#maquette">
+              Recevoir ma maquette gratuite
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .tarifs {
+    display: grid;
+    gap: var(--e-5);
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+
+  .offre {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    border-radius: var(--r-4);
+    background: var(--surface);
+    border: 1px solid var(--bord);
+    box-shadow: var(--ombre-1);
+  }
+
+  .offre--principale {
+    border-color: var(--accent);
+    box-shadow: var(--ombre-2);
+  }
+
+  .offre__haut {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-2);
+  }
+
+  .offre__sans {
+    padding: 0.3125rem 0.75rem;
+    border-radius: var(--r-rond);
+    background: var(--accent-doux);
+    color: var(--accent-texte);
+    font-size: var(--t-mini);
+    font-weight: 700;
+  }
+
+  .offre__prix {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--e-2);
+    margin-top: var(--e-5);
+  }
+
+  .offre__montant {
+    font-size: clamp(2.25rem, 1.8rem + 2vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .offre__unite {
+    color: var(--texte-2);
+  }
+
+  .offre__phrase {
+    margin-top: var(--e-3);
+    color: var(--texte-2);
+  }
+
+  .offre__points {
+    display: grid;
+    gap: var(--e-3);
+    margin-block: var(--e-5) var(--e-6);
+    flex: 1;
+  }
+
+  .offre__points li {
+    display: flex;
+    gap: var(--e-3);
+    font-size: var(--t-petit);
+  }
+
+  .offre__points :global(svg) {
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.125rem;
+    color: var(--accent-texte);
+  }
+
+  @media (min-width: 48rem) {
+    .tarifs {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

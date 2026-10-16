@@ -1,0 +1,195 @@
+---
+import Icone from './Icone.astro';
+
+const resultats = [
+  { nom: 'Fleuriste voisin n° 1', site: true },
+  { nom: 'Fleuriste voisin n° 2', site: true },
+  { nom: 'Fleuriste voisin n° 3', site: true },
+];
+---
+
+<section class="section section--alt" aria-labelledby="titre-probleme">
+  <div class="conteneur probleme">
+    <div class="probleme__texte" data-apparition>
+      <p class="surtitre">Le problème</p>
+      <h2 id="titre-probleme" class="titre-2">Vos clients vous cherchent. Ils trouvent vos voisins.</h2>
+      <p class="chapo">
+        Chaque jour, des habitants et des salariés du quartier tapent « fleuriste Paris 16 » ou « garage
+        Puteaux » sur leur téléphone. Google montre d’abord les commerces qui ont un site clair, avec
+        horaires, adresse et téléphone.
+      </p>
+      <p class="chapo">Sans site, vous passez après eux. Même si votre boutique est la plus belle de la rue.</p>
+    </div>
+
+    <figure class="serp" data-apparition="1">
+      <div class="serp__barre">
+        <Icone nom="recherche" />
+        <span>fleuriste paris 16</span>
+      </div>
+      <div class="serp__plan" aria-hidden="true">
+        <span style="left:22%;top:38%"></span>
+        <span style="left:58%;top:24%"></span>
+        <span style="left:72%;top:62%"></span>
+        <span class="serp__plan-vous" style="left:38%;top:70%"></span>
+      </div>
+      <ol class="serp__liste" role="list">
+        {
+          resultats.map((r) => (
+            <li class="serp__res">
+              <div>
+                <p class="serp__nom">{r.nom}</p>
+                <p class="serp__meta">Fleuriste · Paris 16e · Ouvert</p>
+              </div>
+              <span class="serp__puce serp__puce--ok">Site web</span>
+            </li>
+          ))
+        }
+        <li class="serp__res serp__res--vous">
+          <div>
+            <p class="serp__nom">Votre boutique</p>
+            <p class="serp__meta">Pas de site web · horaires inconnus</p>
+          </div>
+          <span class="serp__puce">Aucun site</span>
+        </li>
+      </ol>
+      <figcaption class="serp__legende">Illustration simplifiée d’une recherche sur téléphone.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .probleme {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  .probleme__texte .chapo {
+    margin-top: var(--e-4);
+    max-width: 34rem;
+  }
+
+  .probleme__texte .titre-2 {
+    max-width: 16ch;
+  }
+
+  .serp {
+    width: 100%;
+    max-width: 28rem;
+    justify-self: center;
+    padding: var(--e-4);
+    border-radius: var(--r-4);
+    background: var(--surface);
+    box-shadow: var(--ombre-2);
+    border: 1px solid var(--bord);
+  }
+
+  .serp__barre {
+    display: flex;
+    align-items: center;
+    gap: var(--e-3);
+    min-height: 3rem;
+    padding: 0 var(--e-4);
+    border-radius: var(--r-rond);
+    background: var(--surface-2);
+    border: 1px solid var(--bord);
+    font-weight: 500;
+  }
+
+  .serp__barre :global(svg) {
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--texte-2);
+  }
+
+  .serp__plan {
+    position: relative;
+    height: 8rem;
+    margin-top: var(--e-4);
+    border-radius: var(--r-2);
+    background:
+      linear-gradient(90deg, transparent 47%, var(--surface) 47% 51%, transparent 51%),
+      linear-gradient(0deg, transparent 55%, var(--surface) 55% 60%, transparent 60%),
+      linear-gradient(30deg, transparent 28%, var(--surface) 28% 31%, transparent 31%),
+      var(--accent-doux);
+  }
+
+  .serp__plan span {
+    position: absolute;
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 50% 50% 50% 0;
+    background: var(--accent);
+    transform: rotate(-45deg);
+    box-shadow: 0 0 0 2px var(--surface);
+  }
+
+  .serp__plan .serp__plan-vous {
+    background: var(--texte-3);
+    opacity: 0.6;
+  }
+
+  .serp__liste {
+    margin-top: var(--e-3);
+  }
+
+  .serp__res {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-3);
+    padding: var(--e-3) var(--e-1);
+    border-bottom: 1px solid var(--bord);
+  }
+
+  .serp__nom {
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .serp__meta {
+    color: var(--texte-2);
+    font-size: var(--t-mini);
+  }
+
+  .serp__puce {
+    flex: none;
+    padding: 0.3125rem 0.75rem;
+    border-radius: var(--r-rond);
+    border: 1px solid var(--bord-fort);
+    font-size: var(--t-mini);
+    font-weight: 600;
+  }
+
+  .serp__puce--ok {
+    background: var(--accent-doux);
+    border-color: transparent;
+    color: var(--accent-texte);
+  }
+
+  .serp__res--vous {
+    margin-top: var(--e-4);
+    border-bottom: 0;
+    border-radius: var(--r-1);
+    padding-inline: var(--e-3);
+    background: var(--erreur-doux);
+  }
+
+  .serp__res--vous .serp__puce {
+    color: var(--erreur);
+    border-color: currentColor;
+  }
+
+  .serp__legende {
+    margin-top: var(--e-4);
+    color: var(--texte-3);
+    font-size: var(--t-mini);
+    text-align: center;
+  }
+
+  @media (min-width: 60rem) {
+    .probleme {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

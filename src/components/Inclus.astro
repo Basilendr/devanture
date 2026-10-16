@@ -1,0 +1,83 @@
+---
+import { inclus } from '../data/site';
+import Icone from './Icone.astro';
+---
+
+<section class="section" aria-labelledby="titre-inclus">
+  <div class="conteneur">
+    <div class="entete-section" data-apparition>
+      <p class="surtitre">Ce qui est inclus</p>
+      <h2 id="titre-inclus" class="titre-2">Tout ce qu’un client cherche, au même endroit.</h2>
+      <p class="chapo">Lisible sur téléphone, simple à utiliser, et à jour.</p>
+    </div>
+
+    <ul class="inclus" role="list">
+      {
+        inclus.map((el, i) => (
+          <li class="inclus__el" data-apparition={i % 3}>
+            <span class="inclus__icone">
+              <Icone nom={el.icone} />
+            </span>
+            <div>
+              <h3 class="inclus__titre">{el.titre}</h3>
+              <p>{el.texte}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .inclus {
+    display: grid;
+    gap: var(--e-6) var(--e-5);
+  }
+
+  .inclus__el {
+    display: flex;
+    gap: var(--e-4);
+    align-items: flex-start;
+  }
+
+  .inclus__icone {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--r-1);
+    background: var(--accent-doux);
+    color: var(--accent-texte);
+  }
+
+  .inclus__icone :global(svg) {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+
+  .inclus__titre {
+    font-size: 1.0625rem;
+    font-weight: 650;
+    line-height: 1.3;
+  }
+
+  .inclus__el p {
+    margin-top: 0.125rem;
+    color: var(--texte-2);
+    font-size: var(--t-petit);
+  }
+
+  @media (min-width: 40rem) {
+    .inclus {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .inclus {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

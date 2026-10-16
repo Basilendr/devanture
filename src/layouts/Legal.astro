@@ -1,0 +1,49 @@
+---
+import Base from './Base.astro';
+interface Props {
+  titre: string;
+  description: string;
+  h1: string;
+}
+const { titre, description, h1 } = Astro.props;
+---
+
+<Base titre={titre} description={description} navSimple>
+  <article class="conteneur legal">
+    <h1 class="titre-2">{h1}</h1>
+    <slot />
+  </article>
+</Base>
+
+<style>
+  .legal {
+    max-width: 44rem;
+    padding-block: clamp(3rem, 8vw, 5rem) var(--section);
+  }
+
+  .legal :global(h2) {
+    margin-top: var(--e-7);
+    margin-bottom: var(--e-3);
+    font-size: 1.375rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .legal :global(p),
+  .legal :global(ul) {
+    margin-top: var(--e-3);
+    color: var(--texte-2);
+  }
+
+  .legal :global(ul) {
+    padding-left: 1.25rem;
+  }
+
+  .legal :global(li + li) {
+    margin-top: var(--e-1);
+  }
+
+  .legal :global(strong) {
+    color: var(--texte);
+  }
+</style>

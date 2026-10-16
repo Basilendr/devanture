@@ -1,0 +1,128 @@
+---
+import { site } from '../data/site';
+import { maquettes } from '../data/maquettes';
+import Icone from './Icone.astro';
+import Telephone from './Telephone.astro';
+import MaquetteSite from './maquettes/MaquetteSite.astro';
+---
+
+<section class="heros" aria-labelledby="titre-heros">
+  <div class="conteneur heros__grille">
+    <div class="heros__texte">
+      <p class="surtitre">Sites web pour commerces indépendants · {site.zones.join(', ').replace(/, ([^,]*)$/, ' et $1')}</p>
+      <h1 id="titre-heros" class="titre-1">{site.promesse}</h1>
+      <p class="chapo heros__chapo">
+        Un site simple et soigné pour votre commerce, en ligne en {site.delaiJours} jours. On vous montre
+        d’abord la maquette, gratuitement.
+      </p>
+      <div class="heros__actions">
+        <a class="btn btn--principal btn--grand" href="#maquette">
+          Recevoir ma maquette gratuite
+          <Icone nom="fleche" />
+        </a>
+        <a class="btn btn--secondaire btn--grand" href="#exemples">Voir des exemples</a>
+      </div>
+      <ul class="heros__garanties" role="list">
+        <li><Icone nom="coche" />Maquette gratuite</li>
+        <li><Icone nom="coche" />Sans engagement</li>
+        <li><Icone nom="coche" />En ligne en {site.delaiJours} jours</li>
+      </ul>
+    </div>
+
+    <div class="heros__visuel">
+      <Telephone label="Exemple fictif de site de fleuriste. Faites défiler l’écran pour le parcourir.">
+        <MaquetteSite m={maquettes.fleuriste} complet />
+      </Telephone>
+      <p class="heros__indice">
+        <span class="etiquette">Exemple</span>
+        <span class="heros__geste"><Icone nom="main" />Faites défiler l’écran</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .heros {
+    padding-block: clamp(2.5rem, 7vw, 6rem) var(--section);
+  }
+
+  .heros__grille {
+    display: grid;
+    gap: clamp(3rem, 6vw, 4rem);
+    align-items: center;
+  }
+
+  .heros__texte {
+    max-width: 38rem;
+  }
+
+  .heros__chapo {
+    margin-top: var(--e-5);
+    max-width: 32rem;
+  }
+
+  .heros__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-3);
+    margin-top: var(--e-6);
+  }
+
+  .heros__garanties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2) var(--e-5);
+    margin-top: var(--e-6);
+    color: var(--texte-2);
+    font-size: var(--t-petit);
+  }
+
+  .heros__garanties li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .heros__garanties :global(svg) {
+    width: 1rem;
+    height: 1rem;
+    color: var(--accent-texte);
+  }
+
+  .heros__visuel {
+    display: grid;
+    justify-items: center;
+    gap: var(--e-4);
+  }
+
+  .heros__indice {
+    display: flex;
+    align-items: center;
+    gap: var(--e-3);
+    color: var(--texte-2);
+    font-size: var(--t-mini);
+  }
+
+  .heros__geste {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .heros__geste :global(svg) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @media (max-width: 30rem) {
+    .heros__actions .btn {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .heros__grille {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+import { etapes, site } from '../data/site';
+---
+
+<section class="section" aria-labelledby="titre-etapes">
+  <div class="conteneur">
+    <div class="entete-section entete-section--centre" data-apparition>
+      <p class="surtitre">Comment ça marche</p>
+      <h2 id="titre-etapes" class="titre-2">Trois étapes. Aucune à faire seul.</h2>
+      <p class="chapo">Vous voyez votre site avant de décider quoi que ce soit.</p>
+    </div>
+
+    <ol class="etapes" role="list">
+      {
+        etapes.map((e, i) => (
+          <li class="etape" data-apparition={i}>
+            <span class="etape__num" aria-hidden="true">
+              {i + 1}
+            </span>
+            <h3 class="titre-3">
+              <span class="cache">Étape {i + 1} : </span>
+              {e.titre}
+            </h3>
+            <p>{e.texte}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="etapes__suite" data-apparition>
+      <a class="btn btn--principal" href="#maquette">Commencer par la maquette gratuite</a>
+      <span>Site en ligne en {site.delaiJours} jours après votre accord.</span>
+    </p>
+  </div>
+</section>
+
+<style>
+  .etapes {
+    display: grid;
+    gap: var(--e-4);
+    counter-reset: etape;
+  }
+
+  .etape {
+    padding: var(--e-6);
+    border-radius: var(--r-3);
+    background: var(--surface);
+    border: 1px solid var(--bord);
+    box-shadow: var(--ombre-1);
+  }
+
+  .etape__num {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: var(--e-5);
+    border-radius: 50%;
+    background: var(--accent-doux);
+    color: var(--accent-texte);
+    font-weight: 700;
+  }
+
+  .etape p {
+    margin-top: var(--e-2);
+    color: var(--texte-2);
+  }
+
+  .etapes__suite {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--e-3) var(--e-5);
+    margin-top: var(--e-7);
+    color: var(--texte-2);
+    font-size: var(--t-petit);
+    text-align: center;
+  }
+
+  @media (min-width: 52rem) {
+    .etapes {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

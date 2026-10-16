@@ -1,0 +1,120 @@
+---
+import { faq } from '../data/site';
+import Icone from './Icone.astro';
+---
+
+<section id="questions" class="section faq" aria-labelledby="titre-faq">
+  <div class="conteneur faq__grille">
+    <div class="entete-section" data-apparition>
+      <p class="surtitre">Questions fréquentes</p>
+      <h2 id="titre-faq" class="titre-2">Vos questions, simplement.</h2>
+      <p class="chapo">Une autre question ? Posez-la dans le formulaire, on vous rappelle.</p>
+    </div>
+
+    <div class="faq__liste" data-accordeon>
+      {
+        faq.map((q) => (
+          <details class="faq__el">
+            <summary class="faq__question">
+              <span>{q.question}</span>
+              <span class="faq__signe" aria-hidden="true">
+                <Icone nom="plus" />
+              </span>
+            </summary>
+            <div class="faq__reponse">
+              <p>{q.reponse}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__grille {
+    display: grid;
+    gap: var(--e-5);
+  }
+
+  .faq__liste {
+    border-top: 1px solid var(--bord);
+  }
+
+  .faq__el {
+    position: relative;
+    border-bottom: 1px solid var(--bord);
+    background: var(--fond);
+  }
+
+  .faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-4);
+    min-height: 3.5rem;
+    padding-block: var(--e-4);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
+    cursor: pointer;
+    list-style: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__question:active .faq__signe {
+    transform: scale(0.9);
+  }
+
+  .faq__signe {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--bord);
+    transition: transform 120ms ease-out;
+  }
+
+  .faq__signe :global(svg) {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 300ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .faq__el[open] .faq__signe :global(svg) {
+    transform: rotate(45deg);
+  }
+
+  .faq__reponse {
+    padding-bottom: var(--e-5);
+    padding-right: var(--e-7);
+    color: var(--texte-2);
+    transform-origin: top left;
+  }
+
+  @media (min-width: 60rem) {
+    .faq__grille {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--e-8);
+      align-items: start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq__signe :global(svg) {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { brancherAccordeons } from '../scripts/accordeon';
+  brancherAccordeons();
+</script>

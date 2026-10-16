@@ -76,6 +76,9 @@
 
   /* Hauteur de la barre de navigation */
   --nav-h: 3.75rem;
+
+  /* Cadre des téléphones d'illustration */
+  --appareil: #1c1c1b;
 }
 
 /* 2. Mode sombre ─────────────────────────────────────────────────────────── */

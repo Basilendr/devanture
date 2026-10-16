@@ -1,0 +1,60 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../data/site';
+---
+
+<Legal
+  titre="Politique de confidentialité — Devanture"
+  description="Comment Devanture utilise les informations envoyées par le formulaire de maquette gratuite."
+  h1="Politique de confidentialité"
+>
+  <p>Dernière mise à jour : [DATE].</p>
+
+  <h2>Qui est responsable ?</h2>
+  <p>
+    {site.editeur.nom}, {site.editeur.statut}, SIRET {site.editeur.siret}, {site.editeur.adresse}. Contact :
+    <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+
+  <h2>Quelles informations ?</h2>
+  <p>Uniquement celles que vous saisissez dans le formulaire « Recevoir ma maquette gratuite » :</p>
+  <ul>
+    <li>nom du commerce, métier et quartier ;</li>
+    <li>numéro de téléphone ;</li>
+    <li>adresse e-mail et message, si vous les remplissez.</li>
+  </ul>
+
+  <h2>Pourquoi ?</h2>
+  <p>
+    Pour vous recontacter, préparer votre maquette gratuite et, si vous le souhaitez, votre site. Rien d’autre : pas
+    de prospection pour d’autres services, pas de revente, pas de transmission à des partenaires commerciaux.
+  </p>
+  <p>Base légale : votre consentement, donné en cochant la case du formulaire.</p>
+
+  <h2>Combien de temps ?</h2>
+  <p>{site.dureeConservation}. Ensuite, les informations sont supprimées.</p>
+
+  <h2>Qui y a accès ?</h2>
+  <p>Seulement {site.editeur.nom}, et les services techniques nécessaires :</p>
+  <ul>
+    <li>Formspree (réception des formulaires, États-Unis) ;</li>
+    <li>Vercel (hébergement du site, États-Unis).</li>
+  </ul>
+  <p>
+    Ces prestataires peuvent traiter des données hors de l’Union européenne, dans le cadre des clauses
+    contractuelles types de la Commission européenne.
+  </p>
+
+  <h2>Vos droits</h2>
+  <p>
+    Vous pouvez à tout moment consulter, corriger ou faire supprimer vos informations, ou retirer votre
+    consentement : écrivez à <a href={`mailto:${site.email}`}>{site.email}</a>. Réponse sous un mois maximum.
+  </p>
+  <p>
+    En cas de désaccord, vous pouvez saisir la CNIL :
+    <a href="https://www.cnil.fr/fr/plaintes" rel="noopener">cnil.fr/fr/plaintes</a>.
+  </p>
+
+  <h2>Cookies</h2>
+  <p>Ce site ne dépose aucun cookie publicitaire et n’utilise aucun outil de mesure d’audience.</p>
+</Legal>
