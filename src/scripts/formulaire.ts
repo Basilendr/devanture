@@ -216,7 +216,7 @@ function brancher(form: HTMLFormElement) {
       if (!reponse.ok || String(json.success) === 'false') throw new Error(json.message || String(reponse.status));
       afficherConfirmation();
     } catch {
-      const tel = document.querySelector<HTMLAnchorElement>('a[href^="tel:"]')?.textContent?.trim();
+      const tel = form.dataset.telephone;
       erreurGlobale.textContent = `L’envoi n’a pas abouti. Réessayez dans un instant${tel ? `, ou appelez-nous au ${tel}` : ''}.`;
       envoyer.removeAttribute('aria-busy');
       libelle.textContent = 'Recevoir ma maquette gratuite';
