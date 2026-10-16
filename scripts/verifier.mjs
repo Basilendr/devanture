@@ -133,14 +133,14 @@ for (const largeur of [375, 768, 1440]) {
   ok('Questionnaire : consentement exigé', (await p.textContent('#f-rgpd-msg')).length > 0);
   await p.check('#f-rgpd');
   let envoye = null;
-  await p.route('https://formsubmit.co/**', (r) => {
+  await p.route('**/api/maquette', (r) => {
     envoye = { url: r.request().url(), corps: r.request().postDataJSON() };
     r.fulfill({ status: 200, contentType: 'application/json', body: '{"success":"true"}' });
   });
   await p.click('[data-envoyer]');
   await pause(600);
   ok('Questionnaire : confirmation affichée', await p.isVisible('[data-confirmation]'));
-  ok('Questionnaire : un seul e-mail vers l’adresse du site', envoye?.url === 'https://formsubmit.co/ajax/devanture.paris@gmail.com');
+  ok('Questionnaire : un seul e-mail vers l’adresse du site', envoye?.url?.endsWith('/api/maquette'));
   ok('Questionnaire : toutes les réponses dans l’e-mail',
     envoye?.corps?.['Présence en ligne'] === 'Fiche Google (Maps), Instagram' && envoye?.corps?.['Contenu souhaité'] === 'Horaires',
     envoye?.corps?._subject);

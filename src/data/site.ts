@@ -21,9 +21,9 @@ export const site = {
 
   // Pas de prix affiché : il dépend de la demande, le client appelle pour le connaître.
 
-  // Envoi du questionnaire : FormSubmit transfère chaque demande, en un seul e-mail, à l'adresse du site.
-  // (La toute première demande déclenche un e-mail d'activation à confirmer une fois.)
-  formulaireAdresse: 'https://formsubmit.co/devanture.paris@gmail.com',
+  // Envoi du questionnaire : fonction api/maquette.js, qui transfère chaque demande en un seul e-mail
+  // à devanture.paris@gmail.com (via FormSubmit). Pour changer d'adresse, voir api/maquette.js.
+  formulaireAdresse: '/api/maquette',
 
   // Mentions légales
   editeur: {
